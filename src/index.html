@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css" integrity="sha384-SZXxX4whJ79/gErwcOYf+zWLeJdY/qpuqC4cAa9rOGUstPomtqpuNWT9wdPEn2fk" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.min.css">
+    <title>Grocery</title>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo-container">
+                <img src="https://res.cloudinary.com/dljezd6qv/image/upload/v1619821176/main-logo-white-small.png"
+                    alt="logo" class="logo">
+            </div>
+            <h1 class="title">Grocery project</h1>
+        </div>
+    </header>
+    <section class="grocery">
+        
+        <!-- form -->
+        <form  class="grocery__form">
+            <p class="alert"></p>
+            <h3 class="grocery__form-title">grocery cart</h3>
+            <div class="grocery__form-control">
+                <input type="text" id="grocery" class="grocery__form-input" placeholder="e.g bread">
+                <button type="submit" class="grocery__form-btn">submit</button>
+            </div>
+        </form>
+        <!-- list -->
+        <div class="grocery-container">
+            <div class="grocery__list">
+                <article class="grocery__item">
+                    <p class="grocery__item-title">item</p>
+                    <div class="grocery__item-btnContainer">
+                        <button class="grocery__item-btn grocery__item-btn_edit ">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="grocery__item-btn grocery__item-btn_delete">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </article>
+            </div>
+            <button type="button" class="grocery__clearBtn">clear items</button>
+        </div>
+    </section>
+</body>
+</html>
