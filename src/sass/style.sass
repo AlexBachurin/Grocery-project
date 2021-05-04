@@ -1,7 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap')
 @import libs/_reset
 
-
 body
     font-family: Roboto, sans-serif
     background-color: #1e2022
@@ -46,7 +45,7 @@ body
             border: none
             color: #999183
             background: #1e2022
-        &-btn 
+        &-btn
             width: 15%
             border-top-right-radius: 10px
             border-bottom-right-radius: 10px
@@ -55,7 +54,7 @@ body
             text-transform: capitalize
             background-color: #33383a
             border: none
-            color: #DCDCDC	
+            color: #DCDCDC
             cursor: pointer
             transition: 0.6s all
             &:hover
@@ -63,7 +62,7 @@ body
 
     &-container
         margin-top: 30px
-        
+        display: none
     &__item
         display: flex
         justify-content: space-between
@@ -88,7 +87,7 @@ body
         display: block
         margin: 0 auto
         margin-top: 30px
-        background-color: transparent 
+        background-color: transparent
         border: none
         outline: none
         cursor: pointer
@@ -98,3 +97,24 @@ body
         letter-spacing: 3px
         &:hover
             color: #dd5252
+
+.alert
+    text-align: center
+    font-size: 10px
+    color: #fff
+    padding: 10px 0
+    border-radius: 10px
+    margin-bottom: 30px
+    letter-spacing: 4px
+    text-transform: uppercase
+    visibility: hidden
+
+.show-container
+    display: block
+
+.success
+    background-color: green
+    visibility: visible
+.remove
+    background-color: red
+    visibility: visible
