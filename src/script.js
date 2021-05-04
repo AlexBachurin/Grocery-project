@@ -95,16 +95,16 @@ window.addEventListener('DOMContentLoaded', () => {
     //edit
     function editValue(e) {
             const target = e.currentTarget;
+            //store editing element into temp variable
+            editElement = target.parentElement.parentElement;
             //put into input value, value of element which we want to edit
-            value = target.parentElement.parentElement.firstChild.textContent;
-            console.log(value);
+            value = editElement.firstChild.textContent;
             formInput.value = value;
             //change button text
             submitBtn.textContent = 'Edit';
             //setup editFlag value to true
             editFlag = true;
-            //store editing element into temp variable
-            editElement = target.parentElement.parentElement;
+            
     }
     //delete
     function deleteValue(e) {
