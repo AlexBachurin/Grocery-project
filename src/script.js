@@ -14,6 +14,14 @@ window.addEventListener('DOMContentLoaded', () => {
     let editId = '';
     let value;
 
+     //***** SETUP PAGE *****
+     let storageArr = getLocalStorage();
+     if (storageArr.length >= 1) {
+         storageArr.forEach(item => {
+             createArticle(item.id, item.value);
+         })
+     }
+
 
     //form submit
     form.addEventListener('submit', (e) => {
@@ -219,13 +227,7 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
 
-    //***** SETUP PAGE *****
-    let storageArr = getLocalStorage();
-    if (storageArr.length >= 1) {
-        storageArr.forEach(item => {
-            createArticle(item.id, item.value);
-        })
-    }
+   
 
     
 
