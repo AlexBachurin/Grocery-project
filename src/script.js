@@ -23,7 +23,7 @@ window.addEventListener('DOMContentLoaded', () => {
      }
 
 
-    //form submit
+    // Adding Item functionality
     form.addEventListener('submit', (e) => {
         e.preventDefault();
         //get value from input, create new article, add innerHTML,
