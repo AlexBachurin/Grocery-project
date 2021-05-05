@@ -12,16 +12,121 @@ window.addEventListener('DOMContentLoaded', () => {
     let editElement;
     let editFlag = false;
     let editId = '';
+    let value;
+
 
     //form submit
     form.addEventListener('submit', (e) => {
         e.preventDefault();
         //get value from input, create new article, add innerHTML,
         //add classes, append to parent, and show container
-        let value = formInput.value;
+        value = formInput.value;
+        //create random id for local storage
+        const id = new Date().getTime().toString();
         //if we have value and its not editing process
         if (value && !editFlag) {
-            const article = document.createElement('article');
+            //CREATE NEW ARTICLE
+            createArticle(id, value);
+            //show alert
+            showAlert('item added to the list', 'success');
+            //add to localStorage
+            addToLocalStorage(id, value);
+            //reset
+            resetToDefault();
+        
+        //IF EDITING
+        } else if (value && editFlag) {
+            //change value
+            editElement.firstChild.textContent = value;
+            //show alert message
+            showAlert('item successfully edited', 'success');
+            //change btn txt
+            submitBtn.textContent = 'submit';
+            //remove editFlag
+            editFlag = false;
+            //edit in local storage
+            editLocalStorage(editId, value)
+            //reset to default
+            resetToDefault();
+            
+            
+        }
+        //if value is empty string
+        else {
+            showAlert('please enter value', 'remove');
+        }
+    })
+
+
+    // ***** CLEAR ALL ITEMS ****
+
+    clearBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        //clean grocery list innerHTML
+        list.innerHTML = ``;
+        //hide container
+        container.classList.remove('show-container');
+        //show message
+        showAlert('list cleared!', 'remove');
+        //reset
+        resetToDefault();
+        //remove all items from local storage
+        clearLocalStorage();
+    })
+
+    // SHOW ALERT MESSAGE
+    function showAlert(message, className) {
+        //show message
+        alertMsg.classList.add(className);
+        alertMsg.textContent = `${message}`;
+        //remove alert msg after 1 sec
+        setTimeout(() => alertMsg.classList.remove(className), 1000)
+    }
+    // EDIT VALUE
+    function editValue(e, id) {
+            const target = e.currentTarget;
+            //store editing element into temp variable
+            editElement = target.parentElement.parentElement;
+            //put into input value, value of element which we want to edit
+            value = editElement.firstChild.textContent;
+            formInput.value = value;
+            //change button text
+            submitBtn.textContent = 'Edit';
+            //setup editFlag value to true
+            editFlag = true;
+            //save edit id
+            editId = id;
+                     
+    }
+    // DELETE VALUE
+    function deleteValue(e, id) {
+        const target = e.currentTarget;
+        target.parentElement.parentElement.remove();
+        //also check if list contains more then 1 article
+        //if its only 1 article, hide container aswell
+        if (list.childElementCount === 0) {
+            container.classList.remove('show-container');
+        }
+        //remove item from storage
+        removeFromLocalStorage(id);
+        //reset
+        resetToDefault();
+    }
+    // RESET TO DEFAULT
+    function resetToDefault() {
+        submitBtn.textContent = 'Submit';
+        formInput.value = '';
+        value = '';
+        editFlag = false;
+    }
+
+    //CREATE ARTICLE
+    function createArticle(id, value) {
+        const article = document.createElement('article');
+            article.classList.add('grocery__item');
+            const attribute = document.createAttribute('data-id');
+            attribute.value = id;
+            article.setAttributeNode(attribute);
             article.innerHTML = `<p class="grocery__item-title">${value}</p>
             <div class="grocery__item-btnContainer">
                 <button class="grocery__item-btn grocery__item-btn_edit ">
@@ -36,85 +141,92 @@ window.addEventListener('DOMContentLoaded', () => {
             // only when we created them on page !!!
             const deleteBtn = article.querySelector('.grocery__item-btn_delete');
             const editBtn = article.querySelector('.grocery__item-btn_edit');
-            //DELETE
+
+            // //DELETE
+
             deleteBtn.addEventListener('click', (e) => {
-                deleteValue(e);
+                deleteValue(e, id);
             });
-            //EDIT
+
+            // //EDIT
+
             editBtn.addEventListener('click', (e) => {
-                editValue(e);
+                editValue(e, id);
             });
-            article.classList.add('grocery__item');
+
+            //APPEND
+
             list.append(article);
             container.classList.add('show-container');
-            //show alert
-            showAlert('item added to the list', 'success');
-            //clear form
-            form.reset();
+    }
+
+
+    // **** LOCAL STORAGE ****
+
+    // ADD ITEM
+
+    function addToLocalStorage(id, value) {
+        const item = {id, value};
         
-        //IF EDITING
-        } else if (value && editFlag) {
-            //change value
-            editElement.firstChild.textContent = value;
-            //show alert message
-            showAlert('item successfully edited', 'success');
-            //change btn txt
-            submitBtn.textContent = 'submit';
-            //remove editFlag
-            editFlag = false;
-            //clear form
-            form.reset();
-            //reset editElement
-            editElement = null;
-        }
-        //if value is empty string
-        else {
-            showAlert('please enter value', 'remove');
-        }
-    })
+        let items = getLocalStorage();
+        items.push(item);
+        //and set it to local storage
+        localStorage.setItem('list', JSON.stringify(items));
 
-    //clear items from grocery list
-    clearBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        //clean grocery list innerHTML
-        list.innerHTML = ``;
-        //hide container
-        container.classList.remove('show-container');
-        //show message
-        showAlert('list cleared!', 'remove');
-    })
+    }
 
-    //show alert
-    function showAlert(message, className) {
-        //show message
-        alertMsg.classList.add(className);
-        alertMsg.textContent = `${message}`;
-        //remove alert msg after 1 sec
-        setTimeout(() => alertMsg.classList.remove(className), 1000)
+    // REMOVE ITEM
+
+    function removeFromLocalStorage(id) {
+        let items = getLocalStorage();
+
+        //check item with matching id, and remove it from the array
+        items = items.filter(item => {
+            return item.id !== id;
+        })
+        
+        //then setup new array to local storage
+        localStorage.setItem('list', JSON.stringify(items));
+        
     }
-    //edit
-    function editValue(e) {
-            const target = e.currentTarget;
-            //store editing element into temp variable
-            editElement = target.parentElement.parentElement;
-            //put into input value, value of element which we want to edit
-            value = editElement.firstChild.textContent;
-            formInput.value = value;
-            //change button text
-            submitBtn.textContent = 'Edit';
-            //setup editFlag value to true
-            editFlag = true;
-            
+
+    //EDIT ITEM
+
+    function editLocalStorage(id, value) {
+        let items = getLocalStorage();
+        //find matching id, change value, and return new array
+        items = items.map(item => {
+            if (item.id === id) {
+                item.value = value;
+            }
+            return item;
+        })
+        //setup edited array to localStorage
+
+        localStorage.setItem('list', JSON.stringify(items));
     }
-    //delete
-    function deleteValue(e) {
-        const target = e.currentTarget;
-        target.parentElement.parentElement.remove();
-        //also check if list contains more then 1 article
-        //if its only 1 article, hide container aswell
-        if (list.childElementCount === 0) {
-            container.classList.remove('show-container');
-        }
+
+    //CLEAR ALL ITEMS
+
+    function clearLocalStorage() {
+        localStorage.removeItem('list');
     }
+
+    //get list with items from storage, if theres none setup it as empty aray
+    function getLocalStorage() {
+        return localStorage.getItem("list") ? JSON.parse(localStorage.getItem('list')) 
+        : [];
+    }
+
+
+    //***** SETUP PAGE *****
+    let storageArr = getLocalStorage();
+    if (storageArr.length >= 1) {
+        storageArr.forEach(item => {
+            createArticle(item.id, item.value);
+        })
+    }
+
+    
 
 })
